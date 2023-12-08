@@ -31,5 +31,5 @@ These limits have been introduced to protect systems from badly formed translati
 	* If you include `-ldflags "-s"` this will decrease your executable size by stripping the symbol table.
 
 # Contributing to this project
-* Make sure files are ran through [gofmt](https://pkg.go.dev/cmd/gofmt) before submitting pull requests
+* Make sure files are ran through [gofmt -s](https://pkg.go.dev/cmd/gofmt) before submitting pull requests. I’m trying to keep the [![Go Report Card](https://goreportcard.com/badge/github.com/dakusan/gol10n)](https://goreportcard.com/report/github.com/dakusan/gol10n) at 100%.
 * This project is licensed under the 3-clause BSD

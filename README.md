@@ -1,6 +1,8 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/dakusan/gol10n)](https://goreportcard.com/report/github.com/dakusan/gol10n)
 [![GoDoc](https://godoc.org/github.com/dakusan/gol10n?status.svg)](https://godoc.org/github.com/dakusan/gol10n)
 
+![Gol10n Logo](docs/gol10n-logo.jpg)
+
 # Description
 This is a highly space and memory optimized l10n (localization) library for Go (GoLang) pronounced “Goal Ten”.<br>
 [Translation strings](docs/definitions.md#Translation-strings) are held, per language, in [text files](docs/translation_files.md) (either [YAML](docs/translation_files.md#YAML-files) or [JSON](docs/translation_files.md#JSON-files)), and compile into [.gtr](docs/definitions.md#Compiled-binary-translation-files) or .gtr.gz (gzip compressed) files.
@@ -181,4 +183,4 @@ These settings are only used when using this library in a [command line interfac
 * [Translation Files](docs/translation_files.md)
 * [Using in Go](docs/using_in_go.md)
 * [Language Get() Functions](docs/language_get_functions.md)
-* [Misc](docs/misc.md) (Hard and soft limits and TODO section)
+* [Misc](docs/misc.md) (Hard and soft limits, build optimizations, contributing to this project)

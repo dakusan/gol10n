@@ -208,7 +208,7 @@ func mainWrapper() bool {
 
 	//Read the settings file
 	if settingsText, err := os.ReadFile(execute.SettingsFileName); err != nil {
-		return stdErr(fmt.Sprintf("Could not read settings file “%s”: %s", execute.SettingsFileName, err.Error()))
+		return stdErr(fmt.Sprintf("Could not read settings file “%s”: %s\nUse --create-settings to create it.", execute.SettingsFileName, err.Error()))
 	} else if err := json.Unmarshal(settingsText, &settings); err != nil {
 		return stdErr(fmt.Sprintf("Could not read settings file “%s”: %s", execute.SettingsFileName, err.Error()))
 	}

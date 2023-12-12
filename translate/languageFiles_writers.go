@@ -38,7 +38,8 @@ func (l *Language) SaveGTRVarsDict(w io.Writer, isCompressed bool) error {
 	return l.dict.toCompiledVarFile(w)
 }
 
-// SaveGoDictionaries saves the *.go files from the language to $outputDirectory/$namespaceName/TranslationIDs.go
-func (l *Language) SaveGoDictionaries(outputDirectory string) (err error, numUpdated uint) {
-	return l.toGoDictionaries(outputDirectory)
+// SaveGoDictionaries saves the *.go files from the language to $outputDirectory/$namespaceName/TranslationIDs.go.
+// The GoDictHeader is inserted just before the `const` declaration
+func (l *Language) SaveGoDictionaries(outputDirectory, GoDictHeader string) (err error, numUpdated uint) {
+	return l.toGoDictionaries(outputDirectory, GoDictHeader)
 }

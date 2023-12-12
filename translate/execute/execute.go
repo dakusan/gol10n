@@ -25,6 +25,7 @@ type ProcessSettings struct {
 	InputPath              string //The directory with the translation text files
 	GoOutputPath           string //The directory to output the generated Go files to. Each namespace gets its own directory and file in the format “$NamespaceName/translationIDs.go”
 	CompiledOutputPath     string //The directory to output the compiled binary translation files to. Each language gets its own .gtr or .gtr.gz (gzip compressed) file
+	GoDictHeader           string //Extra code included just above the const in generated go dictionaries
 	CompressCompiled       bool   //Whether the compiled binary translation files are saved as .gtr or .gtr.gz (gzip compressed)
 	AllowBigStrings        bool   //If the translation strings can be larger than 64KB. If true, and a large translation string is found, then compiled binary translation files will become larger
 	AllowJSONTrailingComma bool   //If JSON files can have trailing commas. If true, a sanitization process is ran over the JSON that changes the regular expression “,\s*\n\s*}” to just “}”
@@ -523,7 +524,7 @@ func (settings *ProcessSettings) processFile(pf *ProcessedFile, compiledDictiona
 	//Output the resultant files for the default language
 	if pf.LangIdentifier == settings.DefaultLanguage {
 		if settings.OutputGoDictionary {
-			if err, numUpdated := pf.Lang.SaveGoDictionaries(settings.GoOutputPath); err != nil {
+			if err, numUpdated := pf.Lang.SaveGoDictionaries(settings.GoOutputPath, settings.GoDictHeader); err != nil {
 				return fmt.Errorf("Could not save go dictionaries: %s", err.Error())
 			} else if numUpdated > 0 {
 				pf.Flags |= PFF_OutputSuccess_GoDictionaries

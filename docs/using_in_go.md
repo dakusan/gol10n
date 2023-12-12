@@ -14,7 +14,7 @@ package NameSpaceExample
 
 import "github.com/dakusan/gol10n/translate"
 
-//goland:noinspection NonAsciiCharacters
+//goland:noinspection NonAsciiCharacters,GoSnakeCaseUsage
 const (
 	//TranslationID = TranslationValue
 	TranslationID translate.TransIndex = iota + 0
@@ -192,8 +192,9 @@ They are in the `translate.load_compiled` package.
 	* Saves a [.gtr](definitions.md#Compiled-binary-translation-files) dictionary file
 * `func (l *Language) SaveGTRVarsDict(w io.Writer, isCompressed bool) error`
 	* Saves a [.gtr](definitions.md#Compiled-binary-translation-files) variable dictionary file
-* `func (l *Language) SaveGoDictionaries(outputDirectory string) (err error, numUpdated uint)`
+* `func (l *Language) SaveGoDictionaries(outputDirectory string, GoDictHeader string) (err error, numUpdated uint)`
 	* Saves the [*.go dictionary files](#generated-go-dictionary-files) from the language to `$outputDirectory/$NamespaceName/TranslationIDs.go`
+	* The `GoDictHeader` is inserted just before the `const` declaration
 
 ## Other Language getters
 These are the other functions under the `Language` class

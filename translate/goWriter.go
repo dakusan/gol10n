@@ -16,7 +16,7 @@ import (
 	"sync"
 )
 
-func (l *Language) toGoDictionaries(outputDirectory string) (_ error, numUpdated uint) {
+func (l *Language) toGoDictionaries(outputDirectory, GoDictHeader string) (_ error, numUpdated uint) {
 	//Constants
 	const (
 		namespaceHashesJson      = "NamespaceHashes.json"
@@ -41,6 +41,11 @@ func (l *Language) toGoDictionaries(outputDirectory string) (_ error, numUpdated
 		outputDirectory = outputDirectory + "/"
 	}
 
+	//Add a newline to end of GoDictHeader if it has data
+	if len(GoDictHeader) != 0 && GoDictHeader[len(GoDictHeader)-1] != '\n' {
+		GoDictHeader = GoDictHeader + "\n"
+	}
+
 	//Namespaces wait until we have read the hash file to write their output
 	numNamespaces := ulenm(l.dict.namespaces)
 	waitForHashes := make(chan bool)
@@ -59,7 +64,7 @@ func (l *Language) toGoDictionaries(outputDirectory string) (_ error, numUpdated
 			//Add the header to the namespace file
 			namespaceName := l.dict.namespacesInOrder[namespaceIndex]
 			builder := bytes.Buffer{}
-			_, _ = fmt.Fprintf(&builder, "package %s\n\nimport \"github.com/dakusan/gol10n/translate\"\n\n//goland:noinspection NonAsciiCharacters\nconst (\n", namespaceName)
+			_, _ = fmt.Fprintf(&builder, "package %s\n\nimport \"github.com/dakusan/gol10n/translate\"\n\n%sconst (\n", namespaceName, GoDictHeader)
 
 			//Write Translation IDs for this namespace
 			n := l.dict.namespaces[namespaceName]

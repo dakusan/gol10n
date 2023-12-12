@@ -85,6 +85,7 @@ func mainWrapper() bool {
 		InputPath:          "translations",
 		GoOutputPath:       "const",
 		CompiledOutputPath: "compiled",
+		GoDictHeader:       "//goland:noinspection NonAsciiCharacters,GoSnakeCaseUsage",
 		CompressCompiled:   true,
 		OutputGoDictionary: true,
 		OutputCompiled:     true,

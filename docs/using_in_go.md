@@ -42,6 +42,8 @@ See [here for the full list of Get() translation functions](language_get_functio
 See [examples in the README](../README.md#Example-get-translation-function-calls).
 
 ## Automatically saving and loading the language files
+* [ProcessSettings](#ProcessSettings)/[ProcessedFile](#ProcessedFile) are in the `translate.execute` package
+* [ReturnData/watch.Execute](#watchReturnData) are in the `translate.watch` package
 
 ### ProcessSettings
 The `ProcessSettings` struct values are taken from [global_settings](../README.md#Settings-file) and are used to automatically read [translation text files](translation_files.md), [compiled translation files](definitions.md#Compiled-binary-translation-files), and [go dictionary files](#Generated-Go-dictionary-files).
@@ -58,21 +60,21 @@ The `ProcessSettings` struct also contains the following flags:
 
 Its functions are:
 * `func (settings *ProcessSettings) Directory() (ProcessedFileList, error)`
-  * Processes all files in the `InputPath` directory. It also returns the resultant languages.
-  * No [ProcessedFiles](#ProcessedFile) are returned if any of the following errors occur: Directory error, language identity used more than once, default language not found
+	* Processes all files in the `InputPath` directory. It also returns the resultant languages.
+	* No [ProcessedFiles](#ProcessedFile) are returned if any of the following errors occur: Directory error, language identity used more than once, default language not found
 * `func (settings *ProcessSettings) File(languageIdentifier string) (loadedLanguages ProcessedFileList, err error)`
-  * Processes a single language and its [fallbacks](definitions.md#Fallback-languages) (and [default](definitions.md#The-default-language)). It returns the resultant languages (fallbacks, default, self).
-  * The languages in the fallback chain and the default language are also processed for the returned Language objects.
+	* Processes a single language and its [fallbacks](definitions.md#Fallback-languages) (and [default](definitions.md#The-default-language)). It returns the resultant languages (fallbacks, default, self).
+	* The languages in the fallback chain and the default language are also processed for the returned Language objects.
 * `func (settings *ProcessSettings) FileNoReturn(languageIdentifier string) error`
-  * Processes a single language.
-  * The [default language](definitions.md#The-default-language) will also need to be processed for [the dictionary](definitions.md#The-dictionary), but will only have the dictionary written out for it if it needs updating.
-  * The languages in the fallback chain will not be processed. Because of this, there will be no Language objects returned.
+	* Processes a single language.
+	* The [default language](definitions.md#The-default-language) will also need to be processed for [the dictionary](definitions.md#The-dictionary), but will only have the dictionary written out for it if it needs updating.
+	* The languages in the fallback chain will not be processed. Because of this, there will be no Language objects returned.
 * `func (settings *ProcessSettings) FileCompileOnly(languageIdentifier string) error`
-  * Processes a single [translation text file](translation_files.md). It does not attempt to look at [fallbacks](definitions.md#Fallback-languages), [default languages](definitions.md#The-default-language), or already-compiled files.
-  * This will only work if a [compiled dictionary](definitions.md#Compiled-binary-translation-files) already exists.
+	* Processes a single [translation text file](translation_files.md). It does not attempt to look at [fallbacks](definitions.md#Fallback-languages), [default languages](definitions.md#The-default-language), or already-compiled files.
+	* This will only work if a [compiled dictionary](definitions.md#Compiled-binary-translation-files) already exists.
 * `func watch.Execute(settings *ProcessSettings) <-chan watch.ReturnData`
-  * Processes all files in the `InputPath` directory.
-  * It continually watches the directory for relevant changes in its own goroutine, and only processes and updates the necessary files when a change is detected. See [watch.ReturnData](#watchReturnData).
+	* Processes all files in the `InputPath` directory.
+	* It continually watches the directory for relevant changes in its own goroutine, and only processes and updates the necessary files when a change is detected. See [watch.ReturnData](#watchReturnData).
 
 ### ProcessedFile
 Some [ProcessSettings](#ProcessSettings) functions return a `map` of `ProcessedFile` structs keyed to the [language identifier](definitions.md#Language-identifiers), which is the `ProcessedFileList` type.
@@ -136,38 +138,38 @@ func Execute(settings *execute.ProcessSettings) <-chan ReturnData {}
 ## Manually loading the language files
 ### Load functions
 * Translation text files:
-  * **LanguageTextFile**: `LF_YAML`, `LF_JSON`, `LF_JSON_AllowTrailingComma`
-    * `func (lf LanguageTextFile) Load(r io.Reader, allowBigStrings bool) (retLang *Language, retWarnings []string, retErrors error)`
-      * Loads a [text](translation_files.md) language file (either [YAML](translation_files.md#YAML-files) or [JSON](translation_files.md#JSON-files)).
-      * [The dictionary](definitions.md#The-dictionary) must be loaded first.
-      * `retLang` is still returned when there are warnings but no errors.
-      * Note: [Fallback language](definitions.md#Fallback-languages) still need to be assigned through [Language.SetFallback()](#Calling-SetFallback).
-  * `func (lf LanguageTextFile) LoadDefault(r io.Reader, allowBigStrings bool) (retLang *Language, retWarnings []string, retErrors error)`
-    * Loads [the default language](definitions.md#The-default-language) text file and [the dictionary](definitions.md#The-dictionary).
-    * `retLang` is still returned when there are warnings but no errors.
+	* **LanguageTextFile**: `LF_YAML`, `LF_JSON`, `LF_JSON_AllowTrailingComma`
+		* `func (lf LanguageTextFile) Load(r io.Reader, allowBigStrings bool) (retLang *Language, retWarnings []string, retErrors error)`
+			* Loads a [text](translation_files.md) language file (either [YAML](translation_files.md#YAML-files) or [JSON](translation_files.md#JSON-files)).
+			* [The dictionary](definitions.md#The-dictionary) must be loaded first.
+			* `retLang` is still returned when there are warnings but no errors.
+			* Note: [Fallback language](definitions.md#Fallback-languages) still need to be assigned through [Language.SetFallback()](#Calling-SetFallback).
+		* `func (lf LanguageTextFile) LoadDefault(r io.Reader, allowBigStrings bool) (retLang *Language, retWarnings []string, retErrors error)`
+			* Loads [the default language](definitions.md#The-default-language) text file and [the dictionary](definitions.md#The-dictionary).
+			* `retLang` is still returned when there are warnings but no errors.
 * Compiled binary files:
-  * **LanguageBinaryFile**: `LF_GTR`
-    * `func (lf LanguageBinaryFile) Load(r io.Reader, isCompressed bool) (*Language, error)`
-      * Loads a [.gtr](definitions.md#Compiled-binary-translation-files) language file.
-      * [The dictionary](definitions.md#The-dictionary) must be loaded first.
-      * Note: [Fallback language](definitions.md#Fallback-languages) still need to be assigned through [Language.SetFallback()](#Calling-SetFallback).
-    * `func (lf LanguageBinaryFile) LoadDefault(r io.Reader, isCompressed bool) (*Language, error)`
-      * Loads a [.gtr](definitions.md#Compiled-binary-translation-files) language file.
-      * This must be [the default language](definitions.md#The-default-language).
-      * [The dictionary](definitions.md#The-dictionary) must be loaded first.
-    * `func (lf LanguageBinaryFile) LoadDictionary(r io.Reader, isCompressed bool) (err error, ok bool)`
-      * Loads [the dictionary](definitions.md#The-dictionary) via a [compiled dictionary file](definitions.md#Compiled-binary-translation-files), which must be done before loading any compiled translation file or non-default translation text file.
-      * Returns an error if the dictionary was not loaded during this call.
-      * Returns `ok=true` if the dictionary was read successfully during this or a previous call to this function.
+	* **LanguageBinaryFile**: `LF_GTR`
+		* `func (lf LanguageBinaryFile) Load(r io.Reader, isCompressed bool) (*Language, error)`
+			* Loads a [.gtr](definitions.md#Compiled-binary-translation-files) language file.
+			* [The dictionary](definitions.md#The-dictionary) must be loaded first.
+			* Note: [Fallback language](definitions.md#Fallback-languages) still need to be assigned through [Language.SetFallback()](#Calling-SetFallback).
+		* `func (lf LanguageBinaryFile) LoadDefault(r io.Reader, isCompressed bool) (*Language, error)`
+			* Loads a [.gtr](definitions.md#Compiled-binary-translation-files) language file.
+			* This must be [the default language](definitions.md#The-default-language).
+			* [The dictionary](definitions.md#The-dictionary) must be loaded first.
+		* `func (lf LanguageBinaryFile) LoadDictionary(r io.Reader, isCompressed bool) (err error, ok bool)`
+			* Loads [the dictionary](definitions.md#The-dictionary) via a [compiled dictionary file](definitions.md#Compiled-binary-translation-files), which must be done before loading any compiled translation file or non-default translation text file.
+			* Returns an error if the dictionary was not loaded during this call.
+			* Returns `ok=true` if the dictionary was read successfully during this or a previous call to this function.
 * **LanguageFile**:
-  * Both **LanguageTextFile** and **LanguageBinaryFile** are of type **LanguageFile**
-  * Both `LanguageTextFile.Load()` and `LanguageBinaryFile.Load()` require that a [dictionary](definitions.md#The-dictionary) already be loaded. The following 2 functions interact with that stored dictionary.
-    * `func (LanguageFile) ClearCurrentDictionary() error`
-      * Erases the stored dictionary so a new dictionary can be loaded.
-      * Returns if dictionary was already loaded.
-    * `func (LanguageFile) HasCurrentDictionary() bool`
-      * Returns if there is a stored dictionary already loaded
-  * Languages that have mismatched dictionaries are incompatible.
+	* Both **LanguageTextFile** and **LanguageBinaryFile** are of type **LanguageFile**
+	* Both `LanguageTextFile.Load()` and `LanguageBinaryFile.Load()` require that a [dictionary](definitions.md#The-dictionary) already be loaded. The following 2 functions interact with that stored dictionary.
+		* `func (LanguageFile) ClearCurrentDictionary() error`
+			* Erases the stored dictionary so a new dictionary can be loaded.
+			* Returns if dictionary was already loaded.
+		* `func (LanguageFile) HasCurrentDictionary() bool`
+			* Returns if there is a stored dictionary already loaded
+	* Languages that have mismatched dictionaries are incompatible.
 
 ### Calling SetFallback
 Calling `Language.SetFallback(fallbackLanguage *Language) error` is required after calling `LanguageTextFile.Load()` or `LanguageBinaryFile.Load()`.
@@ -176,15 +178,22 @@ Calling `Language.SetFallback(fallbackLanguage *Language) error` is required aft
 * A language cannot have itself set as its fallback. That only occurs naturally for the default language.
 * The fallback language being set must already have its fallback language set. This is required so fallback language loops cannot occur.
 
+## Manually loading compiled files with fallbacks
+These functions read in languages from [compiled files](definitions.md#Compiled-binary-translation-files) with just the [language identifier](definitions.md#Language-identifiers) given. They are primarily here for when the [gol10n_read_compiled_only build tag](misc.md#Build-optimizations) is specified, as they handle the same kind of shortcut functionality as the [automatic functions](#Automatically-saving-and-loading-the-language-files), which are not included when `gol10n_read_compiled_only` build tag is specified.
+They are in the `translate.load_compiled` package.
+* `LoadDefault(compiledDirectoryPath string, defaultLanguageIdentifier string, isCompressed bool) (*translate.Language, error)`
+	* Loads the [compiled dictionary](definitions.md#Compiled-binary-translation-files) and [default language](definitions.md#The-default-language).
+* `Load(compiledDirectoryPath string, langIdentifier string, isCompressed bool, defaultLanguage *translate.Language) (*translate.Language, error)`
+	* Loads the language and its [fallbacks](definitions.md#Fallback-languages). The [dictionary](definitions.md#The-dictionary) must be loaded first (Through `LoadDefault()`)
 ## Manually saving the language files
 * `func (l *Language) SaveGTR(w io.Writer, isCompressed bool) error`
-  * Saves a [.gtr](definitions.md#Compiled-binary-translation-files) language file
+	* Saves a [.gtr](definitions.md#Compiled-binary-translation-files) language file
 * `func (l *Language) SaveGTRDict(w io.Writer, isCompressed bool) error`
-  * Saves a [.gtr](definitions.md#Compiled-binary-translation-files) dictionary file
+	* Saves a [.gtr](definitions.md#Compiled-binary-translation-files) dictionary file
 * `func (l *Language) SaveGTRVarsDict(w io.Writer, isCompressed bool) error`
-  * Saves a [.gtr](definitions.md#Compiled-binary-translation-files) variable dictionary file
+	* Saves a [.gtr](definitions.md#Compiled-binary-translation-files) variable dictionary file
 * `func (l *Language) SaveGoDictionaries(outputDirectory string) (err error, numUpdated uint)`
-  * Saves the [*.go dictionary files](#generated-go-dictionary-files) from the language to `$outputDirectory/$NamespaceName/TranslationIDs.go`
+	* Saves the [*.go dictionary files](#generated-go-dictionary-files) from the language to `$outputDirectory/$NamespaceName/TranslationIDs.go`
 
 ## Other Language getters
 These are the other functions under the `Language` class
@@ -196,5 +205,5 @@ These are the other functions under the `Language` class
 * `MessagePrinter() *message.Printer`
 * `TimeLocalizer() (*lctime.Localizer, error)`
 * `TranslationIDLookup(index TransIndex) (val string, ok bool)`
-  * Returns the [namespace name](definitions.md#Namespaces) and [Translation ID](definitions.md#Translation-IDs) name from a **TransIndex**, separated by a dot.
-  * As this is only used for debugging purposes, this is not optimized and has to search through all of a [namespace’s](definitions.md#Namespaces) translations to find a match (only when read from a [compiled dictionary file without the variable dictionary loaded](definitions.md#Compiled-binary-translation-files)).
+	* Returns the [namespace name](definitions.md#Namespaces) and [Translation ID](definitions.md#Translation-IDs) name from a **TransIndex**, separated by a dot.
+	* As this is only used for debugging purposes, this is not optimized and has to search through all of a [namespace’s](definitions.md#Namespaces) translations to find a match (only when read from a [compiled dictionary file without the variable dictionary loaded](definitions.md#Compiled-binary-translation-files)).

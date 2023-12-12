@@ -268,6 +268,11 @@ func (l *Language) TimeLocalizer() (*lctime.Localizer, error) {
 	return l.timeLocalizer, nil
 }
 
+// Gives the language name in the debugger
+func (l *Language) String() string {
+	return l.name
+}
+
 // TranslationIDLookup returns the Namespace name and Translation ID name from a TransIndex, separated by a dot.
 //
 // As this is only used for debugging purposes, this is not optimized and has to search through all of a namespace’s translations to find a match (only when read from a compiled dictionary file without the variable dictionary loaded).

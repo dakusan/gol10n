@@ -5,13 +5,10 @@ package execute
 
 //goland:noinspection GoSnakeCaseUsage
 const (
-	SettingsFileName           = "settings-gol10n.json"
-	DictionaryFileBase         = "dictionary"
-	VarDictionaryFileBase      = "variables"
-	GTR_Extension_Compressed   = ".gtr.gz"
-	GTR_Extension_Uncompressed = ".gtr"
-	YAML_Extension             = "yaml"
-	JSON_Extension             = "json"
+	SettingsFileName      = "settings-gol10n.json"
+	VarDictionaryFileBase = "variables"
+	YAML_Extension        = "yaml"
+	JSON_Extension        = "json"
 )
 
 //goland:noinspection GoSnakeCaseUsage,GoCommentStart

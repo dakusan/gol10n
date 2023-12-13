@@ -132,13 +132,14 @@ Variable Names must be included as properties under [Translation IDs](definition
 
 Variable Names can contain unicode letters, unicode digits, or underscores. They are case-sensitive (including *PluralCount*).
 
-The values for these are their type as a string. The valid types (case-insensitive) are:
-* *Any type*: Anything (Sends to printf as %v)
-* *String Types*: String
-* *Number Types*: Integer, Binary, Octal, HexLower, HexUpper, Scientific, Floating
+The values for these are their type as a string. The valid types (case-insensitive) are the following. If the type is directly passed to [printf](https://pkg.go.dev/fmt#hdr-Printing), its printf specifier character [verb] is included.
+* *Any type*: Anything `%v`
+* *String Types*: String `%s`
+  * Accepts any [Stringer interface](https://pkg.go.dev/fmt#Stringer)
+* *Number Types*: Integer `%d`, Binary `%b`, Octal `%o`, HexLower `%x`, HexUpper `%X`, Scientific `%e`, Floating `%f`
 * *Dates*: DateTime (See [formatting DateTimes](#Formatting-DateTimes))
 * *i18n numeric types*: Currency, IntegerWithSymbols, FloatWithSymbols
-* *Other*: Bool
+* *Other*: Bool `%t`
 * *Embedded translations*: VariableTranslation (See [Embedded Variable translations](#Embedded-Variable-Translations))
 
 # Settings

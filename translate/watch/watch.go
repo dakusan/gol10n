@@ -146,7 +146,7 @@ func execWatchReal(settings *execute.ProcessSettings, ret chan<- ReturnData) {
 				recentWatchesMutex.Unlock()
 
 				//Send message about change and process the file
-				sendMessage(fmt.Sprintf("Change (%s) occurred on “%s”", event.Op.String(), fName))
+				sendMessage(fmt.Sprintf("%s: Change (%s) occurred on “%s”", time.Now().Format("2006-01-02 15:04:05"), event.Op.String(), fName))
 				processFile(langIdent, fName, settings, ret)
 			}()
 		case <-shutdownSignal:

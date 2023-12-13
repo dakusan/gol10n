@@ -65,9 +65,11 @@ import (
 )
 
 func main() {
-	//I wish there was a way to let the process naturally return an error code without forcing the exit with os.Exit()
-	//Because of this I decided to not return success values
-	mainWrapper()
+	retVal := 0
+	if !mainWrapper() {
+		retVal = 1
+	}
+	os.Exit(retVal)
 }
 
 // Returns if successful
@@ -204,7 +206,7 @@ func mainWrapper() bool {
 		if err := e.Encode(settings); err != nil {
 			return stdErr(fmt.Sprintf("Error compiling settings to %s: %s", execute.SettingsFileName, err.Error()))
 		}
-		return stdErr("Settings file created")
+		return !stdErr("Settings file created")
 	}
 
 	//Read the settings file

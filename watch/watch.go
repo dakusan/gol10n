@@ -7,8 +7,8 @@ package watch
 import (
 	"errors"
 	"fmt"
+	"github.com/dakusan/gol10n/execute"
 	"github.com/dakusan/gol10n/translate"
-	"github.com/dakusan/gol10n/translate/execute"
 	"github.com/fsnotify/fsnotify"
 	"os"
 	"os/signal"
